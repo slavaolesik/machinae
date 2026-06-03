@@ -1453,3 +1453,29 @@ macvendors:
         values:
           - vendor
         pretty_name: Mac Address Vendor
+ip2locationio:
+    name: ip2location.io
+    default: False
+    otypes:
+        - ipv4
+        - ipv6
+    json:
+        request:
+            url: https://api.ip2location.io/?ip={target}
+        results:
+            - key: ip
+              pretty_name: ip2location.io ip
+            - key: country_name
+              pretty_name: ip2location.io country name
+            - key: region_name
+              pretty_name: ip2location.io region
+            - key: city_name
+              pretty_name: ip2location.io city
+            - key: latitude
+              pretty_name: ip2location.io latitude
+            - key: longitude
+              pretty_name: ip2location.io longitude
+            - key: zip_code
+              pretty_name: ip2location.io zipcode
+            - key: is_proxy
+              pretty_name: ip2location.io is proxy or not
