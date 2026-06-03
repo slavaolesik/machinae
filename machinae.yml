@@ -155,44 +155,10 @@ unshorten:
         values:
           - unshorten_url
         pretty_name: Unshortened URL
-malc0de:
-  name: Malc0de
-  otypes:
-    - ipv4
-    - fqdn
-    - hash
-  webscraper:
-    request:
-      url: 'https://malc0de.com/database/index.php?search={target}'
-      method: get
-    results:
-    - regex: '(\d{4}\-\d{1,2}\-\d{1,2})'
-      values:
-        - malc0de_date
-      pretty_name: "MC Date"
-    - regex: 'search=(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
-      values:
-        - malc0de_ipaddr
-      pretty_name: MC IP
-    - regex: '(?!search=NA)search=([A-Z]{2})'
-      values:
-        - malc0de_country
-      pretty_name: MC Country
-    - regex: 'search=\d{4,5}..(\d{4,5})'
-      values:
-        - malc0de_asn
-      pretty_name: MC ASN
-    - regex: 'search=\d{4,5}..([A-Za-z]+)'
-      values:
-        - malc0de_asn_name
-      pretty_name: MC ASN Name
-    - regex: 'latest\-scan\/([A-Fa-f0-9]{32})'
-      values:
-        - malc0de_md5
-      pretty_name: MC MD5
-
 AbuseIPDB:
   name: AbuseIPDB
+  default: False
+  note: 'web scrape returns 403; needs API-based rework'
   otypes:
     - ipv4
   webscraper:
@@ -210,28 +176,6 @@ AbuseIPDB:
       values:
         - Last_seen
       pretty_name: 'Last seen'
-
-RansomwareTracker:
-  name: RansomwareTracker
-  otypes:
-    - ipv4
-  webscraper:
-    request:
-      url: 'https://ransomwaretracker.abuse.ch/host/{target}'
-      method: get
-    results:
-    - regex: '((?<=Host\sStatus:</th><td\scolspan="2"><span\sclass="buttonoffline">)\w+)'
-      values:
-        - Active
-      pretty_name: 'Host Status'
-    - regex: '((?<=</td><td>\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}</td><td>)\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})'
-      values:
-        - Last_seen
-      pretty_name: 'Last seen'
-    - regex: '((?<=Malware:</th><td\scolspan="2">)\w+)'
-      values:
-        - ransomwareType
-      pretty_name: 'Ransomware Type'
 
 sans:
   name: SANS
@@ -336,37 +280,10 @@ maxmind:
       pretty_name: MaxMind Longitude
     - key: location.time_zone
       pretty_name: MaxMind Timezone
-freegeoip:
-  name: freegeoip.io
-  default: true
-  otypes:
-    - ipv4
-#    - fqdn
-  json:
-    request:
-      url: https://freegeoip.io/json/{target}
-    results:
-    - key: country_code
-      pretty_name: GeoIP Country Code
-    - key: country_name
-      pretty_name: GeoIP Country
-#    - key: region_code
-#      pretty_name: GeoIP Region Code
-#    - key: region_name
-#      pretty_name: GeoIP Region
-    - key: city
-      pretty_name: GeoIP City
-#    - key: zip_code
-#      pretty_name: GeoIP Zip Code
-#    - key: latitude
-#      pretty_name: GeoIP Latitude
-#    - key: longitude
-#      pretty_name: GeoIP Longitude
-#    - key: time_zone
-#      pretty_name: GeoIP Timezone
 fortinet_classify:
   name: Fortinet Category
-  default: True
+  default: False
+  note: 'scrape endpoint returns 403; needs API-based rework (2026-06)'
   otypes:
     - ipv4
     - fqdn
@@ -538,37 +455,6 @@ vt_hash:
             - '@'
             - result
           onlyif: detected
-reputation_authority:
-  name: Reputation Authority
-  otypes:
-    - fqdn
-    - ipv4
-  webscraper:
-    request:
-      url: 'http://www.reputationauthority.org/lookup.php?ip={target}'
-      method: get
-    results:
-      - regex: '>(\d{1,3}\/\d{1,3})'
-        values:
-          - ra_score
-        pretty_name: Reputation Authority Score
-threatexpert:
-  name: ThreatExpert
-  otypes:
-    - hash
-  webscraper:
-    request:
-      url: 'http://www.threatexpert.com/report.aspx?md5={target}'
-      method: get
-    results:
-      - regex: 'Submission\sreceived.\s(.+)</li>'
-        values:
-          - threatexpert_date
-        pretty_name: Hash found at ThreatExpert
-      - regex: '1">(.{5,100})</td.{10,35}src\='
-        values:
-          - threatexpert_indicators
-        pretty_name: Malicious Indicators from ThreatExpert
 vxvault:
   name: VxVault
   otypes:
@@ -693,52 +579,6 @@ projecthoneypot:
         values:
           - php_harvester_results
         pretty_name: ProjectHoneyPot harvester results
-mcafee_threat_domain:
-  name: McAfee Threat
-  otypes:
-    - fqdn
-  webscraper:
-    request:
-      url: 'https://www.mcafee.com/threat-intelligence/domain/default.aspx?domain={target}'
-      method: get
-    results:
-      - regex: 'ctl00_breadcrumbContent_imgRisk"[^\r\n]+title="([A-Za-z]+)"'
-        values:
-          - mcafee_risk
-        pretty_name: McAfee Web Risk
-      - regex: '<li>[\n\s]*Web\sCategory:[\n\s]*([A-Z][A-Za-z\s/,]+?)[\n\s]*</li>'
-        values:
-          - mcafee_category
-        pretty_name: McAfee Web Category
-      - regex: '<li>[\n\s]*Last\sSeen:[\n\s]*([0-9\-]+)[\n\s]*</li>'
-        values:
-          - mcafee_last_seen
-        pretty_name: McAfee Last Seen
-mcafee_threat_ip:
-  name: McAfee Threat
-  otypes:
-    - ipv4
-  webscraper:
-    request:
-      url: 'https://www.mcafee.com/threat-intelligence/ip/default.aspx?ip={target}'
-      method: get
-    results:
-      - regex: 'ctl00_breadcrumbContent_imgRisk"[^\r\n]+src="/img/Threat_IP/rep_([a-z]+)\.png"'
-        values:
-          - mcafee_risk
-        pretty_name: McAfee Web Risk
-      - regex: 'ctl00_breadcrumbContent_imgRisk1"[^\r\n]+src="/img/Threat_IP/rep_([a-z]+)\.png"'
-        values:
-          - mcafee_risk
-        pretty_name: McAfee Email Risk
-      - regex: 'ctl00_breadcrumbContent_imgRisk2"[^\r\n]+src="/img/Threat_IP/rep_([a-z]+)\.png"'
-        values:
-          - mcafee_risk
-        pretty_name: McAfee Network Risk
-      - regex: '<li>[\n\s]*Web\sCategory:[\n\s]*([A-Z][A-Za-z\s/,]+?)[\n\s]*</li>'
-        values:
-          - mcafee_category
-        pretty_name: McAfee Web Category
 stopforumspam:
   name: StopForumSpam
   otypes:
@@ -1001,35 +841,6 @@ cif:
           - Tags
           - Provider
           - Description
-
-threatcrowd_ip_report:
-  name: ThreatCrowd IP Report
-  default: True
-  otypes:
-  - ipv4
-  json:
-    paginated: false
-    request:
-      url: 'https://www.threatcrowd.org/searchApi/v2/ip/report/?ip={target}'
-      method: get
-      ignored_status_codes:
-        - 404
-    results:
-    - key: 'resolutions'
-      pretty_name: Passive DNS
-      multi_match:
-        keys:
-          - domain
-          - last_resolved
-        labels:
-          - Domain
-          - Last Resolved
-        onlyif:
-          key: last_resolved
-          maxage: '-30d'
-    - key: 'hashes'
-      pretty_name: Known Malware Hash
-      match_all: true
 
 passivetotal_pdns:
   name: PassiveTotal Passive DNS
