@@ -1340,7 +1340,7 @@ metadefender_hash:
     - hash.sha256
   json:
     request:
-      url: https://api.metadefender.com/v2/hash/{target}
+      url: https://api.metadefender.com/v4/hash/{target}
       method: get
       headers:
         apikey:
