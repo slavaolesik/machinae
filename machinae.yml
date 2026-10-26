@@ -205,6 +205,8 @@ netapi_compromised:
       pretty_name: NetAPI Listed Now
     - key: listed_ever
       pretty_name: NetAPI Listed Ever
+    - key: matched_value
+      pretty_name: NetAPI Matched Entry
     - key: first_seen
       pretty_name: NetAPI First Seen
     - key: last_seen
