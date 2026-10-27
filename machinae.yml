@@ -212,7 +212,7 @@ netapi_compromised:
     - key: last_seen
       pretty_name: NetAPI Last Seen
     - key: block_reason
-      pretty_name: NetAPI Source Feed
+      pretty_name: NetAPI Reported By
     - key: note
       pretty_name: NetAPI Note
 
