@@ -194,7 +194,6 @@ malc0de:
 netapi_compromised:
   name: NetAPI Compromised Check
   otypes:
-    - ipv4
     - fqdn
   json:
     request:
